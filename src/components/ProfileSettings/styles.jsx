@@ -83,14 +83,17 @@ export const SettingsImgBlock = styled.div`
     }
 `
 
-export const SettingsImgLink = styled.a``
-
 export const SettingsImg = styled.img`
-    width: 100%;
-    height: auto;
-    display: block;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    display: ${(props) => (props.isAvatar ? 'block' : 'none')};
     -o-object-fit: cover;
         object-fit: cover;
+    @media screen and (max-width: 590px) {
+        width: 132px;
+        height: 132px;
+    }
 `
 
 export const SettingsChangePhoto = styled.a`

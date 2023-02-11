@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import logo from '../../img/logo.png'
 import Button from '../Button/Button'
 import * as S from './styles'
@@ -9,7 +10,9 @@ function ComeBack() {
                 <S.MenuImg class="menu__logo-img" src={logo} alt="logo"/>
             </S.MenuLink>
             <S.MenuForm class="menu__form" action="#">
-                <Button width= '241px' id="btnGoBack">Вернуться на главную</Button>
+                <Link to='/'>
+                    <Button width= '241px' id="btnGoBack">Вернуться на главную</Button>
+                </Link>
             </S.MenuForm>
         </S.ComeBackMenu>
     )

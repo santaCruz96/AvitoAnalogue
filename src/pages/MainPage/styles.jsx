@@ -48,6 +48,14 @@ export const HeaderNav = styled.nav`
             justify-content: end;
 `
 
+export const ButtonsBlock = styled.div`
+    display: flex;
+    gap: 10px;
+    @media screen and (max-width: 768px) {
+        display:none;
+    }
+`
+
 export const ButtonEnter = styled.button`
     padding: 8px 24px;
     height: 40px;

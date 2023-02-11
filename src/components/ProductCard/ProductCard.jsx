@@ -1,21 +1,35 @@
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { getProductId } from '../../store/slices/productSlice'
+import createdOn from '../../helpers/createdOn'
 import * as S from './styles'
 
-function ProductCard() {
+function ProductCard({ id, title, price, city, date, img }) {
+    const imgSrc = `http://localhost:8090/${img}`
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const choiceProduct = () => {
+        dispatch(getProductId(id))
+        navigate('/product')
+    }
+
     return (
-        <S.ItemContainer class="cards__item">
-            <S.Item class="cards__card card">
-                <S.ItemImgBlock class="card__image">
-                    <S.ItemImgLink href="#" target="_blank">
-                        <S.ItemImg src="#" alt="picture"/>
+        <S.ItemContainer id={id}>
+            <S.Item>
+                <S.ItemImgBlock onClick={choiceProduct}>
+                    <S.ItemImgLink target="_blank">
+                        <S.ItemImg img={img} src={imgSrc} alt="picture"/>
                     </S.ItemImgLink>
                 </S.ItemImgBlock>
-                <S.ItemContent class="card__content">
+                <S.ItemContent>
                     <S.ItemLink href="" target="_blank">
-                        <S.ItemTittle class="card__title">Ракетка для большого тенниса Triumph Pro ST</S.ItemTittle>
+                        <S.ItemTittle>{title}</S.ItemTittle>
                     </S.ItemLink>
-                    <S.ItemPrice class="card__price">2&nbsp;200&nbsp;₽</S.ItemPrice>
-                    <S.ItemPlace class="card__place">Санкт Петербург</S.ItemPlace>
-                    <S.ItemDate class="card__date">Сегодня в&nbsp;10:45</S.ItemDate>
+                    <S.ItemPrice>{price}₽</S.ItemPrice>
+                    <S.ItemPlace>{city}</S.ItemPlace>
+                    <S.ItemDate>{createdOn(date)}</S.ItemDate>
                 </S.ItemContent>
             </S.Item>
         </S.ItemContainer>

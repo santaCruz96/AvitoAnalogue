@@ -1,70 +1,95 @@
+import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useGetCommentsByIdQuery, useDeleteProductMutation } from '../../api/skyVitoApi'
+import { selectModal, openCloseModal } from '../../store/slices/modalSlice'
+import createdOn from '../../helpers/createdOn'
+import sellsFrom from '../../helpers/sellsFrom'
 import * as S from './styles'
 
-function Product({page}) {
+function Product({ page, content }) {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const [mainImg, setMainImg] = useState()
+    const productId = useSelector((state) => state.product.productId)
+
+    const { data = [] } = useGetCommentsByIdQuery(productId)
+    const [deleteProduct, {isSuccess}] = useDeleteProductMutation()
+
+    const SERVER = 'http://localhost:8090/'
+
+    useEffect(() => { setMainImg(content?.images[0]?.url) }, [content?.images])
+
+    const openModal = () => {
+        dispatch(selectModal('reviews'))
+        dispatch(openCloseModal(true))
+    }
+    
+    useEffect(() => {
+        if (isSuccess) {
+            navigate('/')
+        }
+    }, [isSuccess])
+
     return (
         <S.Product>
-            <S.ProductContent>
-                <S.ProductLeft>
-                    <S.ProductImgsBlock>
-                        <S.ProductMainImgBlock>
-                            <S.ProductMainImg src="" alt=""/>
-                        </S.ProductMainImgBlock>
-                        <S.ProductImgBar>
-                            <S.ProductImgBarItem>
-                                <S.ProductImgBarItemImg src="" alt=""/>
-                            </S.ProductImgBarItem>
-                            <S.ProductImgBarItem>
-                                <S.ProductImgBarItemImg src="" alt=""/>
-                            </S.ProductImgBarItem>
-                            <S.ProductImgBarItem>
-                                <S.ProductImgBarItemImg src="" alt=""/>
-                            </S.ProductImgBarItem>
-                            <S.ProductImgBarItem>
-                                <S.ProductImgBarItemImg src="" alt=""/>
-                            </S.ProductImgBarItem>
-                            <S.ProductImgBarItem>
-                                <S.ProductImgBarItemImg src="" alt=""/>
-                            </S.ProductImgBarItem>
-                        </S.ProductImgBar>
-                        <S.ProductImgBarMob>
-                            <S.ProductImgBarMobCirlce/>
-                            <S.ProductImgBarMobCirlce/>
-                            <S.ProductImgBarMobCirlce/>
-                            <S.ProductImgBarMobCirlce/>
-                            <S.ProductImgBarMobCirlce/>
-                        </S.ProductImgBarMob>
-                    </S.ProductImgsBlock>
-                </S.ProductLeft>
-                <S.ProductRight>
-                    <S.ProductBlock>
-                        <S.ProductBlockTittle>Ракетка для большого тенниса Triumph Pro STС Б/У</S.ProductBlockTittle>
-                        <S.ProductBlockInfo>
-                            <S.ProductBlockInfoDate>Сегодня в 10:45</S.ProductBlockInfoDate>
-                            <S.ProductBlockInfoCity>Санкт-Петербург</S.ProductBlockInfoCity>
-                            <S.ProductBlockInfoFeedback href="" target="_blank" rel="">23 отзыва</S.ProductBlockInfoFeedback>
-                        </S.ProductBlockInfo>
-                        <S.ProductPrice>2 200 ₽</S.ProductPrice>
-                        {page === 'other' &&
-                            <S.ProductButtonAuthorPhone>Показать телефон<S.Number>8 905 ХХХ ХХ ХХ</S.Number></S.ProductButtonAuthorPhone>
-                        }
-                        {page === 'my' &&
-                            <S.ProductButtonBlock>
-                                <S.ProductButtonEdit>Редактировать</S.ProductButtonEdit>
-                                <S.ProductButtonRemove>Снять с публикации</S.ProductButtonRemove>
-                            </S.ProductButtonBlock>
-                        }
-                        <S.ProductAuthor>
-                            <S.ProductAuthorImgBlock>
-                                <S.ProductAuthorImg src="" alt=""/>
-                            </S.ProductAuthorImgBlock>
-                            <S.ProductAuthorCont>
-                                <S.ProductAuthorName>Кирилл</S.ProductAuthorName>
-                                <S.ProductAuthorAbout>Продает товары с августа 2021</S.ProductAuthorAbout>
-                            </S.ProductAuthorCont>
-                        </S.ProductAuthor>
-                    </S.ProductBlock>
-                </S.ProductRight>
-            </S.ProductContent>
+            {!content && <h1>Загрузка</h1>}
+            {content && 
+                <S.ProductContent>
+                    <S.ProductLeft>
+                        <S.ProductImgsBlock>
+                            <S.ProductMainImgBlock>
+                                <S.ProductMainImg src={`${SERVER}${mainImg}`} alt=""/>
+                            </S.ProductMainImgBlock>
+                            <S.ProductImgBar>
+                                {content.images.map((image) => (
+                                    <S.ProductImgBarItem onClick={() => setMainImg(image.url)}>
+                                        <S.ProductImgBarItemImg src={`${SERVER}${image.url}`} alt=""/>
+                                    </S.ProductImgBarItem>
+                                ))}
+                            </S.ProductImgBar>
+                            <S.ProductImgBarMob>
+                                {content.images.map((image) => (
+                                    <S.ProductImgBarMobCirlce/>
+                                ))
+                                }
+                            </S.ProductImgBarMob>
+                        </S.ProductImgsBlock>
+                    </S.ProductLeft>
+                    <S.ProductRight>
+                        <S.ProductBlock>
+                            <S.ProductBlockTittle>{content.title}</S.ProductBlockTittle>
+                            <S.ProductBlockInfo>
+                                <S.ProductBlockInfoDate>{createdOn(content.created_on)}</S.ProductBlockInfoDate>
+                                <S.ProductBlockInfoCity>{content.user.city}</S.ProductBlockInfoCity>
+                                <S.ProductBlockInfoFeedback onClick={openModal}>{data.length} отзыва</S.ProductBlockInfoFeedback>
+                            </S.ProductBlockInfo>
+                            <S.ProductPrice>{content.price} ₽</S.ProductPrice>
+                            {page === 'other' &&
+                                <S.ProductButtonAuthorPhone>Показать телефон<S.Number>{content.user.phone}</S.Number></S.ProductButtonAuthorPhone>
+                            }
+                            {page === 'my' &&
+                                <S.ProductButtonBlock>
+                                    <S.ProductButtonEdit>Редактировать</S.ProductButtonEdit>
+                                    <S.ProductButtonRemove onClick={() => deleteProduct(productId)}>Снять с публикации</S.ProductButtonRemove>
+                                </S.ProductButtonBlock>
+                            }
+                            <S.ProductAuthor>
+                                <S.ProductAuthorImgBlock>
+                                    <Link to='/profile'>
+                                        <S.ProductAuthorImg isAvatar = {content?.user.avatar} src={`${SERVER}${content?.user.avatar}`} alt=""/>
+                                    </Link>
+                                </S.ProductAuthorImgBlock>
+                                <S.ProductAuthorCont>
+                                    <S.ProductAuthorName>{content.user.name}</S.ProductAuthorName>
+                                    <S.ProductAuthorAbout>Продает товары c {sellsFrom(content.user.sells_from)}</S.ProductAuthorAbout>
+                                </S.ProductAuthorCont>
+                            </S.ProductAuthor>
+                        </S.ProductBlock>
+                    </S.ProductRight>
+                </S.ProductContent>
+            }
         </S.Product>
     )
 }

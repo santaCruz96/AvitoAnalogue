@@ -114,8 +114,8 @@ export const ProductImgsBlock = styled.div`
 `
 
 export const ProductMainImgBlock = styled.div`
-    width: 480px;
-    height: 480px;
+    min-width: 280px;
+    min-height: 280px;
     background-color: #F0F0F0;
     margin: 0 5px;
     @media screen and (max-width: 768px) {
@@ -161,10 +161,11 @@ export const ProductImgBar = styled.div`
 export const ProductImgBarItem = styled.div`
     width: 88px;
     min-width: 88px;
-    height: 88px;
+    min-height: 48px;
     background-color: #F0F0F0;
     border: 2px solid #F0F0F0;
     margin: 0 5px;
+    cursor: pointer;
 `
 
 export const ProductImgBarItemImg = styled.img`
@@ -354,8 +355,9 @@ export const ProductAuthorImgBlock = styled.div`
 
 export const ProductAuthorImg = styled.img`
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    border-radius: 50%;
+    display: ${(props) => (props.isAvatar ? 'block' : 'none')};
     -o-object-fit: cover;
     object-fit: cover;
 `
