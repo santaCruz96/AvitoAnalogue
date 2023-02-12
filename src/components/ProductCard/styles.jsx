@@ -34,6 +34,7 @@ export const ItemImgBlock = styled.div`
     width: 270px;
     height: 270px;
     background-color: #F0F0F0;
+    cursor: pointer;
     @media screen and (max-width: 590px) {
         width: 137px;
         height: 132px;
@@ -46,13 +47,13 @@ export const ItemImgLink = styled.a``
 export const ItemImg = styled.img`
     width: 100%;
     height: 100%;
-    display: block;
+    display: ${(props) => (props.img ? 'block' : 'none')};
     -o-object-fit: cover;
         object-fit: cover;
     @media screen and (max-width: 590px) {
         width: 100%;
         height: 100%;
-        display: block;
+        display: ${(props) => (props.img ? 'block' : 'none')};
         -o-object-fit: cover;
             object-fit: cover;
     }

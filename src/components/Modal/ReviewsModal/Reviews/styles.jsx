@@ -9,9 +9,9 @@ export const Review = styled.div`
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -webkit-box-align: flex-start;
+        -ms-flex-align: flex-start;
+            align-items: flex-start;
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
@@ -48,9 +48,10 @@ export const ReviewImgBlock = styled.div`
 `
 
 export const ReviewImg = styled.img`
-    display: block;
-    width: 100%;
-    height: auto;
+    display: ${(props) => (props.isAvatar ? 'block' : 'none')};
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     -o-object-fit: cover;
     object-fit: cover;
 `

@@ -1,6 +1,6 @@
 import * as S from './styles'
 
-function SellerInformation() {
+function SellerInformation({}) {
     return (
         <S.SellerInformation>
             <S.SellerInformationContent>

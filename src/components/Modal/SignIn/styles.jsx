@@ -1,18 +1,18 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-width: 100vw;
-height: 100vh;
-position: absolute;
+    width: 100%;
+    height: 100%;
+    position: absolute;
 `
 
 export const Container = styled.div`
-width: 100vw;
-height: 100vh;
-margin: 0 auto;
-display: flex;
-justify-content: center;
-background-color: rgba(0, 0, 0, 50%);
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 50%);
 `
 
 export const ModalBlock = styled.div`
