@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useGetCommentsByIdQuery, useDeleteProductMutation } from '../../api/skyVitoApi'
 import { selectModal, openCloseModal } from '../../store/slices/modalSlice'
 import createdOn from '../../helpers/createdOn'
@@ -13,6 +13,7 @@ function Product({ page, content }) {
 
     const [mainImg, setMainImg] = useState()
     const productId = useSelector((state) => state.product.productId)
+    const isLogin = useSelector((state) => state.auth.isLogin)
 
     const { data = [] } = useGetCommentsByIdQuery(productId)
     const [deleteProduct, {isSuccess}] = useDeleteProductMutation()
@@ -21,9 +22,22 @@ function Product({ page, content }) {
 
     useEffect(() => { setMainImg(content?.images[0]?.url) }, [content?.images])
 
-    const openModal = () => {
+    const openReviewsModal = () => {
         dispatch(selectModal('reviews'))
         dispatch(openCloseModal(true))
+    }
+
+    const openEditModal = () => {
+        dispatch(selectModal('edit-product'))
+        dispatch(openCloseModal(true))
+    }
+
+    const openSellerPage = () => {
+        if (isLogin) {
+            navigate('/profile')
+        } else {
+            alert('Для перехода на страницу продавца необходимо авторизоваться')
+        }
     }
     
     useEffect(() => {
@@ -63,7 +77,7 @@ function Product({ page, content }) {
                             <S.ProductBlockInfo>
                                 <S.ProductBlockInfoDate>{createdOn(content.created_on)}</S.ProductBlockInfoDate>
                                 <S.ProductBlockInfoCity>{content.user.city}</S.ProductBlockInfoCity>
-                                <S.ProductBlockInfoFeedback onClick={openModal}>{data.length} отзыва</S.ProductBlockInfoFeedback>
+                                <S.ProductBlockInfoFeedback onClick={openReviewsModal}>{data.length} отзыва</S.ProductBlockInfoFeedback>
                             </S.ProductBlockInfo>
                             <S.ProductPrice>{content.price} ₽</S.ProductPrice>
                             {page === 'other' &&
@@ -71,16 +85,14 @@ function Product({ page, content }) {
                             }
                             {page === 'my' &&
                                 <S.ProductButtonBlock>
-                                    <S.ProductButtonEdit>Редактировать</S.ProductButtonEdit>
+                                    <S.ProductButtonEdit onClick={openEditModal}>Редактировать</S.ProductButtonEdit>
                                     <S.ProductButtonRemove onClick={() => deleteProduct(productId)}>Снять с публикации</S.ProductButtonRemove>
                                 </S.ProductButtonBlock>
                             }
                             <S.ProductAuthor>
-                                <S.ProductAuthorImgBlock>
-                                    <Link to='/profile'>
+                                    <S.ProductAuthorImgBlock onClick={openSellerPage}>
                                         <S.ProductAuthorImg isAvatar = {content?.user.avatar} src={`${SERVER}${content?.user.avatar}`} alt=""/>
-                                    </Link>
-                                </S.ProductAuthorImgBlock>
+                                    </S.ProductAuthorImgBlock>
                                 <S.ProductAuthorCont>
                                     <S.ProductAuthorName>{content.user.name}</S.ProductAuthorName>
                                     <S.ProductAuthorAbout>Продает товары c {sellsFrom(content.user.sells_from)}</S.ProductAuthorAbout>

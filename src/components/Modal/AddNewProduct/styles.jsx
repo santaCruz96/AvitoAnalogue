@@ -410,13 +410,22 @@ export const ImgBlock = styled.div`
     }
 `
 
+export const ImgInput = styled.input`
+    opacity: 0;
+    height: 0;
+    width: 0;
+    line-height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+`
+
 export const Img = styled.img`
-    display: block;
-    width: 100%;
-    height: auto;
+    display: ${(props) => (props.id <= props.preview ? 'inline' : 'none')};
+    width: 90px;
+    height: 90px;
     -o-object-fit: cover;
         object-fit: cover;
-    z-index: 2;
     @media screen and (max-width: 768px) {
         display: block;
         width: 100%;
@@ -434,6 +443,7 @@ export const ImgCover = styled.div`
     left: 0;
     background-color: #F0F0F0;
     z-index: -1;
+    cursor: pointer;
     ::after {
         content: "";
         position: absolute;
@@ -456,6 +466,16 @@ export const ImgCover = styled.div`
         -webkit-transform: rotate(90deg);
                 transform: rotate(90deg);
     }
+`
+
+export const DeletePreview = styled.div`
+    display: ${(props) => (props.id <= props.preview ? 'block' : 'none')};
+    position: absolute;
+    color: white;
+    top: 0;
+    right: 0;
+    padding-right: 10px;
+    cursor: pointer;
 `
 
 export const ModalFormBlockPrice = styled(ModalFormBlock)`

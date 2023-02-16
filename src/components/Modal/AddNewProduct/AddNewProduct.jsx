@@ -1,23 +1,39 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { selectModal, openCloseModal } from '../../../store/slices/modalSlice'
-import { useAddNewProductWithoutImgMutation } from '../../../api/skyVitoApi'
+import { useAddNewProductMutation, useAddNewProductWithoutImgMutation } from '../../../api/skyVitoApi'
 import * as S from './styles'
 
 function AddNewProduct() {
     const dispatch = useDispatch()
+    const filePicker = useRef()
 
-    const [AddNewProductWithoutImg] = useAddNewProductWithoutImgMutation()
+    const [addNewProductWithoutImg] = useAddNewProductWithoutImgMutation()
+    const [addNewProduct] = useAddNewProductMutation()
 
     const [productValues, setProductValues] = useState({
         title: '',
         description: '',
+        files: [],
         price: 0
     })
+    const [preview, setPreview] = useState([])
 
     const onSubmit = (e) => {
         e.preventDefault()
-        AddNewProductWithoutImg(productValues)
+        const formData = new FormData()
+        const query = `?title=${productValues.title}&description=${productValues.description}&price=${Number(productValues.price)}`
+        productValues.files?.forEach((picture) => formData.append('files', picture))
+        const data = {
+            query,
+            formData,
+        }
+        if (productValues.files.length > 0) {
+            addNewProduct(data)
+        } else {
+            addNewProductWithoutImg(productValues)
+        }
     } 
 
     const handleTitleChange = (e) => {
@@ -34,16 +50,62 @@ function AddNewProduct() {
         })
     }
 
+    useEffect(() => {
+        if (productValues.files.length === 0) {
+          setPreview([])
+        }
+        const objectUrl = []
+        productValues.files.forEach((image) => objectUrl.push(URL.createObjectURL(image)))
+        setPreview(objectUrl)
+    }, [productValues.files])
+    
+    const handlePictureChange = (e) => {
+        const newFiles = Object.values(e.target.files).map((file) => file)
+        if (newFiles) {
+            const updatedList = [...productValues.files, ...newFiles]
+            setProductValues({
+                ...productValues,
+                files: updatedList
+            })
+        }
+        console.log(productValues.files);
+    }
+
     const handlePriceChange = (e) => {
         setProductValues({
             ...productValues,
-            price: Number(e.target.value),
+            price: e.target.value,
         })
     }
+
+    const handleDeletePreview = (id) => () => {
+        const copy = [...productValues.files]
+        copy.splice(id, 1)
+        setProductValues({
+            ...productValues,
+            files: copy
+        })
+        setPreview(preview.slice(id, 1))
+    }
+
+    useEffect(() => {
+        if (productValues.files.length > 5) {
+            const copy = [...productValues.files]
+            copy.splice(5, 1)
+            setProductValues({
+                ...productValues,
+                files: copy
+            })
+        }
+    }, [productValues.files])
 
     const closeModal = () => {
         dispatch(selectModal(''))
         dispatch(openCloseModal(false))
+    }
+
+    const handlePick = () => {
+        filePicker.current.click()
     }
 
     return (
@@ -67,24 +129,34 @@ function AddNewProduct() {
                             <S.ModalFormParagraph>Фотографии товара<S.Span>не более 5 фотографий</S.Span></S.ModalFormParagraph>
                             <S.ModalFormBarImg>
                                 <S.ImgBlock>
-                                    <S.Img src="" alt=""/>
-                                    <S.ImgCover></S.ImgCover>                                    
+                                    <S.ImgCover onClick={handlePick}></S.ImgCover>
+                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput>
+                                    <S.Img id={1} preview={preview.length} src={preview[0]} alt="" />
+                                    <S.DeletePreview onClick={handleDeletePreview(0)} id={1} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>
                                 <S.ImgBlock>
-                                    <S.Img src="" alt=""/>
-                                    <S.ImgCover></S.ImgCover>
+                                    <S.ImgCover onClick={handlePick}></S.ImgCover>
+                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput> 
+                                    <S.Img id={2} preview={preview.length} src={preview[1]} alt="" />
+                                    <S.DeletePreview onClick={handleDeletePreview(1)} id={2} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>
                                 <S.ImgBlock>
-                                    <S.ImgCover></S.ImgCover>
-                                    <S.Img src="" alt=""/>
+                                    <S.ImgCover onClick={handlePick}></S.ImgCover>
+                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput> 
+                                    <S.Img id={3} preview={preview.length} src={preview[2]} alt="" />
+                                    <S.DeletePreview onClick={handleDeletePreview(2)} id={3} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>
                                 <S.ImgBlock>
-                                    <S.ImgCover></S.ImgCover>
-                                    <S.Img src="" alt=""/>
+                                    <S.ImgCover onClick={handlePick}></S.ImgCover>
+                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput> 
+                                    <S.Img id={4} preview={preview.length} src={preview[3]} alt="" />
+                                    <S.DeletePreview onClick={handleDeletePreview(3)} id={4} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>
                                 <S.ImgBlock>
-                                    <S.ImgCover></S.ImgCover>
-                                    <S.Img src="" alt=""/>
+                                    <S.ImgCover onClick={handlePick}></S.ImgCover>
+                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput> 
+                                    <S.Img id={5} preview={preview.length} src={preview[4]} alt="" />
+                                    <S.DeletePreview onClick={handleDeletePreview(4)} id={5} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>
                             </S.ModalFormBarImg>
                         </S.ModalFormBlock>
