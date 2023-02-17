@@ -19,6 +19,11 @@ function AddNewProduct() {
         price: 0
     })
     const [preview, setPreview] = useState([])
+    
+    const closeModal = () => {
+        dispatch(selectModal(''))
+        dispatch(openCloseModal(false))
+    }
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -34,6 +39,8 @@ function AddNewProduct() {
         } else {
             addNewProductWithoutImg(productValues)
         }
+        alert('Создано')
+        closeModal()
     } 
 
     const handleTitleChange = (e) => {
@@ -68,6 +75,7 @@ function AddNewProduct() {
                 files: updatedList
             })
         }
+        console.log(e.target.files);
         console.log(productValues.files);
     }
 
@@ -99,11 +107,6 @@ function AddNewProduct() {
         }
     }, [productValues.files])
 
-    const closeModal = () => {
-        dispatch(selectModal(''))
-        dispatch(openCloseModal(false))
-    }
-
     const handlePick = () => {
         filePicker.current.click()
     }
@@ -128,33 +131,29 @@ function AddNewProduct() {
                         <S.ModalFormBlock>
                             <S.ModalFormParagraph>Фотографии товара<S.Span>не более 5 фотографий</S.Span></S.ModalFormParagraph>
                             <S.ModalFormBarImg>
+                                <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput>
                                 <S.ImgBlock>
                                     <S.ImgCover onClick={handlePick}></S.ImgCover>
-                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput>
                                     <S.Img id={1} preview={preview.length} src={preview[0]} alt="" />
                                     <S.DeletePreview onClick={handleDeletePreview(0)} id={1} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>
                                 <S.ImgBlock>
                                     <S.ImgCover onClick={handlePick}></S.ImgCover>
-                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput> 
                                     <S.Img id={2} preview={preview.length} src={preview[1]} alt="" />
                                     <S.DeletePreview onClick={handleDeletePreview(1)} id={2} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>
                                 <S.ImgBlock>
                                     <S.ImgCover onClick={handlePick}></S.ImgCover>
-                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput> 
                                     <S.Img id={3} preview={preview.length} src={preview[2]} alt="" />
                                     <S.DeletePreview onClick={handleDeletePreview(2)} id={3} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>
                                 <S.ImgBlock>
                                     <S.ImgCover onClick={handlePick}></S.ImgCover>
-                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput> 
                                     <S.Img id={4} preview={preview.length} src={preview[3]} alt="" />
                                     <S.DeletePreview onClick={handleDeletePreview(3)} id={4} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>
                                 <S.ImgBlock>
                                     <S.ImgCover onClick={handlePick}></S.ImgCover>
-                                    <S.ImgInput type='file' onChange={handlePictureChange} ref={filePicker}></S.ImgInput> 
                                     <S.Img id={5} preview={preview.length} src={preview[4]} alt="" />
                                     <S.DeletePreview onClick={handleDeletePreview(4)} id={5} preview={preview.length}>x</S.DeletePreview>
                                 </S.ImgBlock>

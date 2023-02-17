@@ -471,11 +471,13 @@ export const ImgCover = styled.div`
 export const DeletePreview = styled.div`
     display: ${(props) => (props.id <= props.preview ? 'block' : 'none')};
     position: absolute;
-    color: white;
+    color: black;
     top: 0;
     right: 0;
-    padding-right: 10px;
+    padding-right: 5px;
+    padding-left: 5px;
     cursor: pointer;
+    background-color: white;
 `
 
 export const ModalFormBlockPrice = styled(ModalFormBlock)`

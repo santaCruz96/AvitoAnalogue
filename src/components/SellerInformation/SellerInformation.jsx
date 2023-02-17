@@ -9,6 +9,7 @@ function SellerInformation({ product }) {
     const navigate = useNavigate()
 
     const [currentUser, setCurrentUser] = useState(null)
+    const [shownPhone, setShownPhone] = useState(false)
 
     const { data, isSuccess } = useGetAllUsersQuery()
     const { data: user } = useGetUserQuery()
@@ -26,6 +27,10 @@ function SellerInformation({ product }) {
             navigate('/my_profile')
         }
     }, [isSuccess])
+
+    const showPhone = () => {
+        setShownPhone(!shownPhone)
+    }
     
     return (
         <S.SellerInformation>
@@ -49,7 +54,7 @@ function SellerInformation({ product }) {
                                 </S.SellerImgMobLink>
                             </S.SellerImgMobBlock>
                         </S.SellerImgMobContainer>
-                        <S.SellerButton>Показать телефон<S.Number>{currentUser?.phone}</S.Number></S.SellerButton>
+                        <S.SellerButton onClick={showPhone}><S.Number>{shownPhone ? currentUser.phone : 'Показать телефон'}</S.Number></S.SellerButton>
                     </S.SellerRight>
                 </S.Seller>
             </S.SellerInformationContent>
