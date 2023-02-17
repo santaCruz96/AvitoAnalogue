@@ -13,6 +13,9 @@ export const Container = styled.div`
     display: flex;
     justify-content: center;
     background-color: rgba(0, 0, 0, 50%);
+    @media screen and (max-width: 768px) {
+        background-color: white;
+    }
 `
 
 export const ModalBlock = styled.div`
@@ -410,9 +413,9 @@ export const ImgBlock = styled.div`
 `
 
 export const Img = styled.img`
-    display: block;
-    width: 100%;
-    height: auto;
+display: inline;
+width: 90px;
+height: 90px;
     -o-object-fit: cover;
         object-fit: cover;
     z-index: 2;
@@ -425,6 +428,18 @@ export const Img = styled.img`
     }
 `
 
+export const DeletePreview = styled.div`
+    display: block;
+    position: absolute;
+    color: black;
+    top: 0;
+    right: 0;
+    padding-right: 5px;
+    padding-left: 5px;
+    cursor: pointer;
+    background-color: white;
+`
+
 export const ImgCover = styled.div`
     position: absolute;
     width: 100%;
@@ -433,6 +448,7 @@ export const ImgCover = styled.div`
     left: 0;
     background-color: #F0F0F0;
     z-index: -1;
+    cursor: pointer;
     ::after {
         content: "";
         position: absolute;
@@ -457,10 +473,19 @@ export const ImgCover = styled.div`
     }
 `
 
+export const ImgInput = styled.input`
+    opacity: 0;
+    height: 0;
+    width: 0;
+    line-height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+`
+
 export const ModalFormBlockPrice = styled(ModalFormBlock)`
     position: relative;
 `
-
 
 export const ModalFormInputPrice = styled.input`
     width: 200px;

@@ -174,6 +174,8 @@ export const SellerButton = styled.button`
     }
 `
 
+export const NumberBlock = styled.div``
+
 export const Number = styled.span`
     display: block;
     font-size: 14px;

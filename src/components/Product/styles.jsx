@@ -360,6 +360,7 @@ export const ProductAuthorImg = styled.img`
     display: ${(props) => (props.isAvatar ? 'block' : 'none')};
     -o-object-fit: cover;
     object-fit: cover;
+    cursor: pointer;
 `
 
 export const ProductAuthorCont = styled.div`

@@ -12,6 +12,7 @@ function Product({ page, content }) {
     const navigate = useNavigate()
 
     const [mainImg, setMainImg] = useState()
+    const [shownPhone, setShownPhone] = useState(false)
     const productId = useSelector((state) => state.product.productId)
     const isLogin = useSelector((state) => state.auth.isLogin)
 
@@ -45,6 +46,14 @@ function Product({ page, content }) {
             navigate('/')
         }
     }, [isSuccess])
+
+    const showPhone = () => {
+        if (!isLogin) {
+            alert('Авторизуйтесь, чтобы увидеть номер телефона')
+        } else {
+            setShownPhone(!shownPhone)
+        }
+    }
 
     return (
         <S.Product>
@@ -81,7 +90,7 @@ function Product({ page, content }) {
                             </S.ProductBlockInfo>
                             <S.ProductPrice>{content.price} ₽</S.ProductPrice>
                             {page === 'other' &&
-                                <S.ProductButtonAuthorPhone>Показать телефон<S.Number>{content.user.phone}</S.Number></S.ProductButtonAuthorPhone>
+                                <S.ProductButtonAuthorPhone onClick={showPhone}><S.Number>{shownPhone ? content?.user.phone : 'Показать телефон'}</S.Number></S.ProductButtonAuthorPhone>
                             }
                             {page === 'my' &&
                                 <S.ProductButtonBlock>

@@ -1,31 +1,57 @@
 import { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectModal, openCloseModal } from '../../../store/slices/modalSlice'
-import { useGetProductByIdQuery, useEditProductMutation } from '../../../api/skyVitoApi'
+import {
+    useGetProductByIdQuery,
+    useEditProductMutation,
+    useAddProductImageMutation,
+    useDeleteProductImageMutation
+} from '../../../api/skyVitoApi'
 import * as S from './styles'
 
 function EditProduct() {
+    const SERVER = 'http://localhost:8090/'
+    const LIMIT = 5
+
     const dispatch = useDispatch()
     const title = useRef()
     const description = useRef()
     const price = useRef()
+    const filePicker = useRef()
 
+    const [limit, setLimit] = useState(LIMIT)
     const [productValues, setProductValues] = useState({
         title: '',
         description: '',
-        files: [],
         price: 0
     })
+    const [preview, setPreview] = useState([])
+    const [fileList, setFileList] = useState([])
 
     const productId = useSelector((state) => state.product.productId)
 
     const { data, isSuccess } = useGetProductByIdQuery(productId)
-    const [editProduct, {isSuccess: successEdit}] = useEditProductMutation()
+    const [editProduct, { isSuccess: successEdit }] = useEditProductMutation()
+    const [addImage, {isSuccess: successAdd}] = useAddProductImageMutation()
+    const [deleteImage] = useDeleteProductImageMutation()
 
     const closeModal = () => {
         dispatch(selectModal(''))
         dispatch(openCloseModal(false))
     }
+
+    useEffect(() => {
+        setLimit(LIMIT - data.images.length - fileList.length)
+    }, [data.images.length, fileList.length])
+
+    useEffect(() => {
+        if (fileList.length === 0) {
+          setPreview([])
+        }
+        const objectUrl = []
+        fileList.forEach((image) => objectUrl.push(URL.createObjectURL(image)))
+        setPreview(objectUrl)
+    }, [fileList])
 
     const submitChange = (e) => {
         e.preventDefault()
@@ -35,7 +61,44 @@ function EditProduct() {
             price: Number(productValues.price),
         }
         editProduct({ id: productId, body: data })
-        console.log(productValues);
+        if (fileList) {
+            fileList.forEach((el) => {
+              const formData = new FormData()
+              formData.append('file', el)
+                addImage({ id:productId, body: formData })
+            })
+        }
+        closeModal()
+    }
+
+    const handleDeleteImage = (id, url) => () => {
+        const query = `?file_url=${url}`
+        deleteImage({ id, query })
+    }
+
+    const handleDeletePreview = (id) => () => {
+        const copy = [...fileList]
+        copy.splice(id, 1)
+        setFileList(copy)
+        setPreview(preview.slice(id, 1))
+    }
+
+    useEffect(() => {
+        if (fileList.length > 5) {
+            const copy = [...fileList]
+            copy.splice(5, 1)
+            setFileList(copy)
+        }
+    }, [fileList])
+
+    const handlePictureChange = (e) => {
+        const newFiles = Object.values(e.target.files).map((file) => file)
+        if (newFiles) {
+            const updatedList = [...fileList, ...newFiles]
+            setFileList(updatedList)
+        }
+        console.log(e.target.files);
+        console.log(productValues.files);
     }
 
     const handleTitleChange = (e) => {
@@ -65,7 +128,6 @@ function EditProduct() {
                 ...productValues,
                 title: data.title,
                 description: data.description,
-                files: data.images,
                 price: data.price
             })
             title.current.value = data.title
@@ -74,11 +136,17 @@ function EditProduct() {
         }
     }, [isSuccess])
 
+    const handlePick = () => {
+        filePicker.current.click()
+    }
+
     useEffect(() => {
-        if (successEdit) {
+        if (successEdit && successAdd) {
+            setFileList([])
             alert('Изменено')
+            closeModal()
         }
-    }, [successEdit])
+    }, [successAdd, successEdit])
 
     return (
         <S.Container>
@@ -100,26 +168,42 @@ function EditProduct() {
                         <S.ModalFormBlock>
                             <S.ModalFormParagraph>Фотографии товара<S.Span>не более 5 фотографий</S.Span></S.ModalFormParagraph>
                             <S.ModalFormBarImg>
-                                <S.ImgBlock>
-                                    <S.Img src="" alt=""/>
-                                    <S.ImgCover></S.ImgCover>                                    
-                                </S.ImgBlock>
-                                <S.ImgBlock>
-                                    <S.Img src="" alt=""/>
-                                    <S.ImgCover></S.ImgCover>
-                                </S.ImgBlock>
-                                <S.ImgBlock>
-                                    <S.ImgCover></S.ImgCover>
-                                    <S.Img src="" alt=""/>
-                                </S.ImgBlock>
-                                <S.ImgBlock>
-                                    <S.ImgCover></S.ImgCover>
-                                    <S.Img src="" alt=""/>
-                                </S.ImgBlock>
-                                <S.ImgBlock>
-                                    <S.ImgCover></S.ImgCover>
-                                    <S.Img src="" alt=""/>
-                                </S.ImgBlock>
+                                <S.ImgInput
+                                    id='files'
+                                    type='file'
+                                    name='files'
+                                    onChange={handlePictureChange}
+                                    ref={filePicker}>
+                                </S.ImgInput>
+                                {data.images.map((item) => (
+                                    <S.ImgBlock key={item.id} id={item.id}>
+                                        <S.Img src={`${SERVER}${item.url}`} alt='' />
+                                        <S.DeletePreview onClick={handleDeleteImage(item.ad_id, item.url)}>
+                                            x
+                                        </S.DeletePreview>    
+                                    </S.ImgBlock>
+                                ))}
+                                {preview.length > 0
+                                    ? preview.map((item, index) => (
+                                        <S.ImgBlock key={item} id={index}>
+                                            <S.Img src={item} alt='' />
+                                            <S.DeletePreview type='button' onClick={handleDeletePreview(index)}>
+                                                x
+                                            </S.DeletePreview>
+                                        </S.ImgBlock>
+                                    ))
+                                    : null
+                                }
+                                {Array(limit)
+                                    .fill()
+                                    .map((index) => {
+                                        return (
+                                            <S.ImgBlock key={index} id={index}>
+                                                <S.ImgCover onClick={handlePick}></S.ImgCover>
+                                            </S.ImgBlock>
+                                        )
+                                    })
+                                }
                             </S.ModalFormBarImg>
                         </S.ModalFormBlock>
                         <S.ModalFormBlockPrice>

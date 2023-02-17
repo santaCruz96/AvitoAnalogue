@@ -7,12 +7,14 @@ export const Wrapper = styled.div`
 `
 
 export const Container = styled.div`
-    width: 100vw;
-    height: 100vh;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     background-color: rgba(0, 0, 0, 50%);
+        @media screen and (max-width: 590px) {
+        background-color: white;
+    }
 `
 
 export const ModalBlock = styled.div`

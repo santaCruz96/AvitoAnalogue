@@ -119,6 +119,21 @@ export const skyVitoApi = createApi({
             }),
             invalidatesTags: ['Products']
         }),
+        addProductImage: build.mutation({
+            query: ({ id, body }) => ({
+                url: `/ads/${id}/image`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['Products']
+        }),
+        deleteProductImage: build.mutation({
+            query: ({ id, query }) => ({
+                url: `/ads/${id}/image/${query}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Products']
+        }),
         deleteProduct: build.mutation({
             query: (id) => ({
                 url: `/ads/${id}`,
@@ -145,5 +160,7 @@ export const {
     useAddNewProductWithoutImgMutation,
     useAddNewProductMutation,
     useEditProductMutation,
+    useAddProductImageMutation,
+    useDeleteProductImageMutation,
     useDeleteProductMutation
 } = skyVitoApi
