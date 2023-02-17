@@ -36,7 +36,7 @@ function SignIn() {
             dispatch(setAccessToken(data?.access_token))
             dispatch(setRefreshToken(data?.refresh_token))
             dispatch(openCloseModal(false))
-            navigate('my_profile')
+            navigate('/my_profile')
         }
     }, [data?.access_token, data?.refresh_token, dispatch, isSuccess, navigate])
 

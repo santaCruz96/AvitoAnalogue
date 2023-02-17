@@ -1,24 +1,23 @@
-import { useSelector } from 'react-redux'
 import { useEffect, useState, useRef } from 'react'
-import { useChangeUserDataMutation } from '../../api/skyVitoApi'
+import { useChangeUserDataMutation, useChangeUserAvatarMutation } from '../../api/skyVitoApi'
 import * as S from './styles'
 
-function ProfileSettings({ data, isSuccess }) {
+function ProfileSettings({ data, isSuccess, isLoading }) {
     const SERVER = 'http://localhost:8090/'
 
     const firstName = useRef()
     const lastName = useRef()
     const city = useRef()
     const phone = useRef()
-    const filePicker = useRef(null)
-
-    const token = useSelector((state) => state.auth?.accessToken)
+    const filePicker = useRef()
 
     const [selectedAvatarFile, setSelectedAvatarFile] = useState(null)
 
     const [changeUserData] = useChangeUserDataMutation()
+    const [changeUserAvatar] = useChangeUserAvatarMutation()
 
     const [avatar, setAvatar] = useState(null)
+    const [preview, setPreview] = useState(null)
     const [userValues, setUserValues] = useState({
         role: 'user',
         email: '',
@@ -31,28 +30,18 @@ function ProfileSettings({ data, isSuccess }) {
     const handleAvatarChange = (e) => {
         console.log(e.target.files)
         setSelectedAvatarFile(e.target.files[0])
-    }
-
-    const submitAvatar = async () => {
-        const formData = new FormData()
-        formData.append('file', selectedAvatarFile)
-
-        const res = await fetch(`${SERVER}user/avatar`, {
-            method: 'POST',
-            headers: {
-                'authorization': `Bearer ${token}`
-            },
-            body: formData
-        })
-        console.log(res)
+        setPreview(e.target.files[0])
     }
 
     const onSubmit = (e) => {
         e.preventDefault()
         changeUserData(userValues)
         console.log(userValues)
+        
         if (selectedAvatarFile) {
-            submitAvatar()
+            const formData = new FormData()
+            formData.append('file', selectedAvatarFile)
+            changeUserAvatar(formData)
         }
     }
 
@@ -91,6 +80,7 @@ function ProfileSettings({ data, isSuccess }) {
                 phone: data.phone,
                 city: data.city
             })
+            setPreview(null)
             setAvatar(data.avatar)
             firstName.current.value = data.name
             lastName.current.value = data.surname
@@ -99,6 +89,20 @@ function ProfileSettings({ data, isSuccess }) {
         }
     }, [isSuccess])
 
+    useEffect(() => {
+        if (isLoading) {
+            setAvatar(' ')
+            firstName.current.value = 'Загрузка'
+            lastName.current.value = 'Загрузка'
+            city.current.value = 'Загрузка'
+            phone.current.value = 'Загрузка'
+        }
+    }, [isLoading])
+
+    const handlePickAvatar = () => {
+        filePicker.current.click()
+    }
+
     return (
         <S.ProfileSettingsBlock>
             <S.ProfileSettingsContent>
@@ -106,10 +110,10 @@ function ProfileSettings({ data, isSuccess }) {
                 <S.ProfileSettings>
                     <S.SettingsLeft>
                         <S.SettingsImgBlock>
-                            <S.SettingsImg isAvatar = {avatar} src={`${SERVER}${avatar}`} alt=""/>
+                            <S.SettingsImg isAvatar = {avatar} src={preview ? URL.createObjectURL(preview) : `${SERVER}${avatar}`} alt=""/>
                         </S.SettingsImgBlock>
-                        <S.SettingsChangePhoto>
-                            <input type='file' onChange={handleAvatarChange} ref={filePicker}></input>
+                        <S.AvatarInput type='file' onChange={handleAvatarChange} ref={filePicker}></S.AvatarInput>
+                        <S.SettingsChangePhoto onClick={handlePickAvatar}>
                             Заменить
                         </S.SettingsChangePhoto>
                     </S.SettingsLeft>

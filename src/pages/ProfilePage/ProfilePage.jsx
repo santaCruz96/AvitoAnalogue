@@ -1,10 +1,11 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import MobLogo from '../../components/MobLogo/MobLogo'
 import HeaderButton from '../../components/HeaderButton/HeaderButton'
 import ComeBack from '../../components/ComeBack/ComeBack'
 import ProfileSettings from '../../components/ProfileSettings/ProfileSettings'
 import ProductCardsBlock from '../../components/ProductCardsBlock/ProductCardsBlock'
+import Modal from '../../components/Modal/Modal'
 import Footer from '../../components/Footer/Footer'
 import { setLogin } from '../../store/slices/authSlice'
 import { selectModal, openCloseModal } from '../../store/slices/modalSlice'
@@ -15,7 +16,10 @@ function ProfilePage() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const { data, isSuccess } = useGetUserQuery()
+    const whichModal = useSelector((state) => state.modal.modal)
+    const modalIsOpen = useSelector((state) => state.modal.modalIsShown)
+
+    const { data, isSuccess, isLoading } = useGetUserQuery()
     const { data: myProducts = [] } = useGetMyProductsQuery()
     
     const openModalAddNewProduct = () => {
@@ -31,7 +35,7 @@ function ProfilePage() {
 
     return (
         <S.Wrapper>
-            <S.Container>
+            <S.Container>{modalIsOpen && <Modal modal={whichModal} />}
                 <S.Header>
                     <S.HeaderNav>
                         <MobLogo/>
@@ -46,7 +50,7 @@ function ProfilePage() {
                         <S.MainCenterBlock>
                             <ComeBack />
                             <S.Greeting>{`Здравствуйте, ${data?.name}!`}</S.Greeting>
-                            <ProfileSettings data={data} isSuccess={isSuccess} />
+                            <ProfileSettings data={data} isSuccess={isSuccess} isLoading={isLoading} />
                             <S.ProductsTittle>Мои товары</S.ProductsTittle>
                         </S.MainCenterBlock>
                         <S.MainContent>

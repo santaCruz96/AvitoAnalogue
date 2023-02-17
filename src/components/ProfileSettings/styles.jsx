@@ -96,6 +96,16 @@ export const SettingsImg = styled.img`
     }
 `
 
+export const AvatarInput = styled.input`
+    opacity: 0;
+    height: 0;
+    width: 0;
+    line-height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+`
+
 export const SettingsChangePhoto = styled.a`
     margin-top: 10px;
     margin-bottom: 30px;

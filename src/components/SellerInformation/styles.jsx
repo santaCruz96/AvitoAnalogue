@@ -75,8 +75,9 @@ export const SellerImgBlock = styled.div`
 export const SellerImgLink = styled.a``
 
 export const SellerImg = styled.img`
-    width: 100%;
-    height: auto;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
     display: block;
     -o-object-fit: cover;
     object-fit: cover;

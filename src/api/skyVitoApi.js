@@ -51,14 +51,23 @@ export const skyVitoApi = createApi({
             query: () => ({
                 url: '/ads/me'
             }),
-            providesTags: ['User']
+            providesTags: [ 'Products']
         }),
         changeUserData: build.mutation({
             query: ({ ...body }) => ({
                 url: '/user',
                 method: 'PATCH',
                 body
-            })
+            }),
+            invalidatesTags: ['User']
+        }),
+        changeUserAvatar: build.mutation({
+            query: (body) => ({
+                url: '/user/avatar',
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['User']
         }),
         getAllProducts: build.query({
             query: () => ({
@@ -69,7 +78,8 @@ export const skyVitoApi = createApi({
         getProductById: build.query({
             query: (id) => ({
                 url: `/ads/${id}`
-            })
+            }),
+            providesTags: ['Products']
         }),
         getCommentsById: build.query({
             query: (id) => ({
@@ -85,10 +95,26 @@ export const skyVitoApi = createApi({
             }),
             invalidatesTags: ['Comments']
         }),
+        addNewProduct: build.mutation({
+            query: (data) => ({
+                url: `/ads${data.query}`,
+                method: 'POST',
+                body: data.formData
+            }),
+            invalidatesTags: ['Products']
+        }),
         addNewProductWithoutImg: build.mutation({
             query: ({ ...body }) => ({
                 url: '/adstext',
                 method: 'POST',
+                body
+            }),
+            invalidatesTags: ['Products']
+        }),
+        editProduct: build.mutation({
+            query: ({ id, body }) => ({
+                url: `/ads/${id}`,
+                method: 'PATCH',
                 body
             }),
             invalidatesTags: ['Products']
@@ -111,10 +137,13 @@ export const {
     useGetAllUsersQuery,
     useGetMyProductsQuery,
     useChangeUserDataMutation,
+    useChangeUserAvatarMutation,
     useGetAllProductsQuery,
     useGetProductByIdQuery,
     useGetCommentsByIdQuery,
     useAddCommentMutation,
     useAddNewProductWithoutImgMutation,
+    useAddNewProductMutation,
+    useEditProductMutation,
     useDeleteProductMutation
 } = skyVitoApi
