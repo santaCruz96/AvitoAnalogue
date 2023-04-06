@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# SkyVito
+Финальный индивидуальный проект
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Описание проекта:
 
-## Available Scripts
+Cайт онлайн объявлений, аналог "Авито".
 
-In the project directory, you can run:
+Макет доступен [здесь](https://www.figma.com/file/ISqzPS7Sym7V004jFo5buE/%D0%A1%D0%B0%D0%B9%D1%82-%D0%B0%D0%BD%D0%B0%D0%BB%D0%BE%D0%B3-%D0%90%D0%B2%D0%B8%D1%82%D0%BE?node-id=0%3A1&t=TkHwMTtpkVn5B1xD-0)
 
-### `npm start`
+## Структура и функционал приложения
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Главная страница приложения
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- [x] Пока пользователь не авторизован, он имеет доступ только к Главной странице, на которой отображаются товары, которые размещены на площадке.
+- [x] Пользователь может осуществлять поиск по объявлениям с помощью строки поиска товара.
+- [x] Пользователь имеет возможность авторизации и регистрации на сайте.
 
-### `npm test`
+### Страница профиля
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [x] В личном кабинете отображается: приветствие пользователя, имя и фамилия, аватарка и телефон.
+- [x] Все поля могут редактироваться.
+- [x] Если пользователь не редактировал эти поля, то кнопка “Сохранить” неактивна. 
+- [x] Ниже в профиле отображаются “Мои товары”.
+- [x] По клику на товар открывается карточка товара.
 
-### `npm run build`
+### Страница товара
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [x] Указаны цена, наименование и описание товара, телефон и имя продавца. Также представлены отзывы пользователей о товаре. 
+- [x] Если эту карточку открывает продавец, он имеет возможность редактировать цену, наименование и описание товара.
+- [x] Есть возможность снять объявление с публикации.
+- [x] По клику на кнопку “Разместить объявление” открывается модальное окно и у продавца есть возможность добавить цену, наименование и описание товара, и его картинку. В конце окна кнопка “Опубликовать”.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Страница продавца
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- [x] Информация о продавце: аватарка, имя, фамилия, город, дата размещения первого объявления.
+- [x] Кнопка для отображения телефона продавца.
+- [x] Список всех товаров продавца.
 
-### `npm run eject`
+### Страница / модальное окно отзывов
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- [x] Список всех отзывов о товаре с указанием имени продавца, его аватарки и даты размещения отзыва.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Страница / модальное окно создания нового объявления
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- [x] Пользователь имеет возможность указать название, описание, цену товара, а также загрузить до 5 фотографий.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Страница / модальное окно редактирования объявления
 
-## Learn More
+- [x] Пользователь имеет возможность изменить название, описание, цену товара, а также удалить / загрузить до 5 фотографий.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Запуск приложения
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Склонируйте репозиторий:
 
-### Code Splitting
+```
+git clone https://github.com/Yarengina/SkyVito.git
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Backend
 
-### Analyzing the Bundle Size
+Для запуска бэкенда потребуется docker и docker-compose.
+Перейдите в директорию проекта и запустите бэкенд командой:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+docker-cmopose up -d
+```
 
-### Making a Progressive Web App
+Бэкенд и документация в Swagger GUI будут доступны по адресу: `http://localhost:8090/`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Остановить работу бэкенда можно командой:
 
-### Advanced Configuration
+```
+docker-compose down
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Технический стек приложения
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [x] React
+- [x] Redux + Redux Toolkit + RTK Query
+- [x] React Router DOM, реализация routing
+- [x] js-cookie, react-responsive, react-hook-form
