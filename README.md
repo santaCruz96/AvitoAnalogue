@@ -52,7 +52,7 @@ Cайт онлайн объявлений, аналог "Авито".
 Склонируйте репозиторий:
 
 ```
-git clone https://github.com/Yarengina/SkyVito.git
+git clone https://github.com/santaCruz96/AvitoAnalogue.git
 ```
 
 ### Backend
