@@ -1,70 +1,78 @@
-# Getting Started with Create React App
+# SkyVito
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Описание проекта:
 
-## Available Scripts
+Cайт онлайн объявлений, аналог "Авито".
 
-In the project directory, you can run:
+## Структура и функционал приложения
 
-### `npm start`
+### Главная страница приложения
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [x] Пока пользователь не авторизован, он имеет доступ только к Главной странице, на которой отображаются товары, которые размещены на площадке.
+- [x] Пользователь может осуществлять поиск по объявлениям с помощью строки поиска товара.
+- [x] Пользователь имеет возможность авторизации и регистрации на сайте.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Страница профиля
 
-### `npm test`
+- [x] В личном кабинете отображается: приветствие пользователя, имя и фамилия, аватарка и телефон.
+- [x] Все поля могут редактироваться.
+- [x] Если пользователь не редактировал эти поля, то кнопка “Сохранить” неактивна. 
+- [x] Ниже в профиле отображаются “Мои товары”.
+- [x] По клику на товар открывается карточка товара.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Страница товара
 
-### `npm run build`
+- [x] Указаны цена, наименование и описание товара, телефон и имя продавца. Также представлены отзывы пользователей о товаре. 
+- [x] Если эту карточку открывает продавец, он имеет возможность редактировать цену, наименование и описание товара.
+- [x] Есть возможность снять объявление с публикации.
+- [x] По клику на кнопку “Разместить объявление” открывается модальное окно и у продавца есть возможность добавить цену, наименование и описание товара, и его картинку. В конце окна кнопка “Опубликовать”.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Страница продавца
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [x] Информация о продавце: аватарка, имя, фамилия, город, дата размещения первого объявления.
+- [x] Кнопка для отображения телефона продавца.
+- [x] Список всех товаров продавца.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Страница / модальное окно отзывов
 
-### `npm run eject`
+- [x] Список всех отзывов о товаре с указанием имени продавца, его аватарки и даты размещения отзыва.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Страница / модальное окно создания нового объявления
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [x] Пользователь имеет возможность указать название, описание, цену товара, а также загрузить до 5 фотографий.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Страница / модальное окно редактирования объявления
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- [x] Пользователь имеет возможность изменить название, описание, цену товара, а также удалить / загрузить до 5 фотографий.
 
-## Learn More
+## Запуск приложения
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Склонируйте репозиторий:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+git clone https://github.com/santaCruz96/AvitoAnalogue.git
+```
 
-### Code Splitting
+### Backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Для запуска бэкенда потребуется docker и docker-compose.
+Перейдите в директорию проекта и запустите бэкенд командой:
 
-### Analyzing the Bundle Size
+```
+docker-cmopose up -d
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Бэкенд и документация в Swagger GUI будут доступны по адресу: `http://localhost:8090/`
 
-### Making a Progressive Web App
+Остановить работу бэкенда можно командой:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
+docker-compose down
+```
 
-### Advanced Configuration
+### Технический стек приложения
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [x] React
+- [x] Redux + Redux Toolkit + RTK Query
+- [x] React Router DOM, реализация routing
+- [x] js-cookie, react-responsive, react-hook-form
