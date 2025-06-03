@@ -59,7 +59,7 @@ git clone https://github.com/santaCruz96/AvitoAnalogue.git
 Перейдите в директорию проекта и запустите бэкенд командой:
 
 ```
-docker-cmopose up -d
+docker compose -f 'back-skyVito/docker-compose-backend.yaml' up -d
 ```
 
 Бэкенд и документация в Swagger GUI будут доступны по адресу: `http://localhost:8090/`
@@ -67,7 +67,7 @@ docker-cmopose up -d
 Остановить работу бэкенда можно командой:
 
 ```
-docker-compose down
+docker compose -f 'back-skyVito/docker-compose-backend.yaml' down
 ```
 
 ### Технический стек приложения
